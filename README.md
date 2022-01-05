@@ -129,7 +129,7 @@
 
 **Scenario 1 : Now admin user can able to access the deployment.**
 
-**# . admin_creds.sh** 
+**. admin_creds.sh** 
 
     # k get deploy
     NAME         READY   UP-TO-DATE   AVAILABLE   AGE
@@ -137,12 +137,12 @@
 
 **Scenario 2 : Usgin deploy user we can able to scale the deployment but for admin we are getting error as he dont have permission to scale.**
  
- # . deploy_creds.sh  
+**. deploy_creds.sh**  
  
     # kubectl scale --replicas=2 deployment/springboot
    deployment.apps/springboot scaled
   
-  # . admin_creds.sh 
+**. admin_creds.sh** 
 
     # kubectl scale --replicas=2 deployment/springboot
     Error from server (Forbidden): deployments.apps "springboot" is forbidden: User "admin" cannot patch resource "deployments/scale" in API group "apps" in the namespace "default"
@@ -152,7 +152,7 @@
     # k get rs
     Error from server (Forbidden): replicasets.apps is forbidden: User "admin" cannot list resource "replicasets" in API group "apps" in the namespace "default"
 
-# . deploy_creds.sh 
+**. deploy_creds.sh **
 
     # k get rs
     NAME                   DESIRED   CURRENT   READY   AGE
@@ -160,7 +160,7 @@
 
 **Scenario 4 : Both admin/depoly user having permission to list deployment on default namespace only, if we try to list resources from other ns will get error.**
 
-# . admin_creds.sh 
+**. admin_creds.sh **
       # aws sts get-caller-identity 
       {
           "Account": "5569****635478", 
@@ -168,14 +168,14 @@
           "Arn": "arn:aws:iam::5569****635478:user/admin"
       }
       
-# alias k=kubectl
+      # alias k=kubectl
       # k get deploy
       NAME         READY   UP-TO-DATE   AVAILABLE   AGE
       springboot   2/2     2            2           4h19m
       # k get deploy -n kube-system
       Error from server (Forbidden): deployments.apps is forbidden: User "admin" cannot list resource "deployments" in API group "apps" in the namespace "kube-system"
 
-# . deploy_creds.sh 
+**. deploy_creds.sh**
       # k get deploy
       NAME         READY   UP-TO-DATE   AVAILABLE   AGE
       springboot   2/2     2            2           4h19m
