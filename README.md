@@ -157,3 +157,30 @@
     # k get rs
     NAME                   DESIRED   CURRENT   READY   AGE
     springboot-db6684d7b   2         2         2       60m
+
+**Scenario 4 : Both admin/depoly user having permission to list deployment on default namespace only, if we try to list resources from other ns will get error.**
+
+[root@ip-172-31-28-184 rbac-springboot-demo]# . admin_creds.sh 
+[root@ip-172-31-28-184 rbac-springboot-demo]# aws sts get-caller-identity 
+{
+    "Account": "556952635478", 
+    "UserId": "AIDAYDLHWZBLM4EAWSZZK", 
+    "Arn": "arn:aws:iam::556952635478:user/admin"
+}
+[root@ip-172-31-28-184 rbac-springboot-demo]# k get deploy
+-bash: k: command not found
+[root@ip-172-31-28-184 rbac-springboot-demo]# alias k=kubectl
+[root@ip-172-31-28-184 rbac-springboot-demo]# k get deploy
+NAME         READY   UP-TO-DATE   AVAILABLE   AGE
+springboot   2/2     2            2           4h19m
+[root@ip-172-31-28-184 rbac-springboot-demo]# k get deploy -n kube-system
+Error from server (Forbidden): deployments.apps is forbidden: User "admin" cannot list resource "deployments" in API group "apps" in the namespace "kube-system"
+[root@ip-172-31-28-184 rbac-springboot-demo]# 
+[root@ip-172-31-28-184 rbac-springboot-demo]# 
+[root@ip-172-31-28-184 rbac-springboot-demo]# . deploy_creds.sh 
+[root@ip-172-31-28-184 rbac-springboot-demo]# k get deploy
+NAME         READY   UP-TO-DATE   AVAILABLE   AGE
+springboot   2/2     2            2           4h19m
+[root@ip-172-31-28-184 rbac-springboot-demo]# 
+[root@ip-172-31-28-184 rbac-springboot-demo]# k get deploy -n kube-system
+Error from server (Forbidden): deployments.apps is forbidden: User "deploy" cannot list resource "deployments" in API group "apps" in the namespace "kube-system"
