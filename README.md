@@ -69,7 +69,7 @@
 
 **Add the user details to aws-auth.yaml and apply it to k8s cluster, so that we can map users to k8s.**
 
-# kubectl get configmap -n kube-system aws-auth -o yaml | egrep -v "creationTimestamp|resourceVersion|selfLink|uid" | sed '/^ annotations:/,+2 d' > aws-auth.yaml
+**kubectl get configmap -n kube-system aws-auth -o yaml | egrep -v "creationTimestamp|resourceVersion|selfLink|uid" | sed '/^ annotations:/,+2 d' > aws-auth.yaml**
   
   
     cat aws-auth.yaml 
@@ -94,7 +94,7 @@
 
 # 4.	Test new user
 
-**# . admin_creds.sh**
+**. admin_creds.sh**
 
 **# aws sts get-caller-identity**
 
@@ -152,7 +152,7 @@
     # k get rs
     Error from server (Forbidden): replicasets.apps is forbidden: User "admin" cannot list resource "replicasets" in API group "apps" in the namespace "default"
 
-**. deploy_creds.sh **
+**. deploy_creds.sh**
 
     # k get rs
     NAME                   DESIRED   CURRENT   READY   AGE
@@ -160,7 +160,8 @@
 
 **Scenario 4 : Both admin/depoly user having permission to list deployment on default namespace only, if we try to list resources from other ns will get error.**
 
-**. admin_creds.sh **
+**. admin_creds.sh**
+
       # aws sts get-caller-identity 
       {
           "Account": "5569****635478", 
@@ -176,6 +177,7 @@
       Error from server (Forbidden): deployments.apps is forbidden: User "admin" cannot list resource "deployments" in API group "apps" in the namespace "kube-system"
 
 **. deploy_creds.sh**
+
       # k get deploy
       NAME         READY   UP-TO-DATE   AVAILABLE   AGE
       springboot   2/2     2            2           4h19m
